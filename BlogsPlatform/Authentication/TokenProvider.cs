@@ -34,7 +34,7 @@ internal sealed class TokenProvider : ITokenProvider
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(_options.ExpirationInMinutes),
+            Expires = DateTime.Now.AddMinutes(_options.ExpirationInMinutes),
             SigningCredentials = credentials,
             Issuer = _options.Issuer,
             Audience = _options.Audience

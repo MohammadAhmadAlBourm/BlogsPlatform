@@ -7,7 +7,6 @@ using BlogsPlatform.Abstractions.Messaging;
 using BlogsPlatform.Authentication;
 using BlogsPlatform.Authorization;
 using BlogsPlatform.Database;
-using BlogsPlatform.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

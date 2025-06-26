@@ -1,6 +1,4 @@
-﻿using BlogsPlatform.Abstractions.Localization;
-
-namespace BlogsPlatform.Services;
+﻿namespace BlogsPlatform.Abstractions.Localization;
 
 public class LanguageContext(IHttpContextAccessor _httpContextAccessor) : ILanguageContext
 {

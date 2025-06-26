@@ -2,7 +2,7 @@
 
 namespace BlogsPlatform.Abstractions.DomainEvents;
 
-internal sealed class DomainEventsDispatcher(IServiceProvider serviceProvider) : IDomainEventsDispatcher
+public sealed class DomainEventsDispatcher(IServiceProvider serviceProvider) : IDomainEventsDispatcher
 {
     private static readonly ConcurrentDictionary<Type, Type> HandlerTypeDictionary = new();
     private static readonly ConcurrentDictionary<Type, Type> WrapperTypeDictionary = new();

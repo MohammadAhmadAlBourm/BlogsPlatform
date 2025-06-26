@@ -32,6 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\BlogTags\" />
+    <Folder Include="Features\Comments\" />
+    <Folder Include="Features\MediaFiles\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

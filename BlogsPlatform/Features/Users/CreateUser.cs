@@ -15,8 +15,7 @@ public static class CreateUser
     public sealed record Command(
         string FirstName,
         string LastName,
-        string Email,
-        string Password) : ICommand<CreateUserResponse>;
+        string Email) : ICommand<CreateUserResponse>;
 
     public sealed class CreateUserResponse
     {
@@ -38,10 +37,6 @@ public static class CreateUser
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("A valid email is required.");
-
-            RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("Password is required.")
-                .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
         }
     }
 
@@ -49,10 +44,12 @@ public static class CreateUser
     {
         private readonly BlogContext _context;
         private readonly IPasswordHasher _passwordHasher;
-        public Handler(BlogContext context, IPasswordHasher passwordHasher)
+        private readonly IPasswordGenerator _passwordGenerator;
+        public Handler(BlogContext context, IPasswordHasher passwordHasher, IPasswordGenerator passwordGenerator)
         {
             _context = context;
             _passwordHasher = passwordHasher;
+            _passwordGenerator = passwordGenerator;
         }
 
         public async Task<Result<CreateUserResponse>> Handle(Command command, CancellationToken cancellationToken)
@@ -63,9 +60,11 @@ public static class CreateUser
                 LastName = command.LastName,
                 Username = command.Email.Split('@')[0],
                 Email = command.Email,
-                Password = _passwordHasher.Hash(command.Password),
                 CreatedDate = DateTime.Now,
             };
+
+            string password = _passwordGenerator.Generate();
+            user.Password = _passwordHasher.Hash(password);
 
             bool isExist = await _context.Users.AnyAsync(x => x.Username == user.Username, cancellationToken);
             if (isExist)
@@ -78,6 +77,9 @@ public static class CreateUser
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync(cancellationToken);
+
+            // Optionally, you can send an email to the user with their credentials
+
 
             CreateUserResponse response = new()
             {
